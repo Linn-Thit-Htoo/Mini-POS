@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "BTcsm7EDWlfzwibp1ykM3Y3NKmummvLkpEv6bzIoTos=",
+  "Source": "POS.Backend",
+  "BasePath": "_content/POS.Backend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

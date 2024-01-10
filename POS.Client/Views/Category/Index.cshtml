@@ -1,0 +1,43 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Category Page";
+    List<CategoryDataModel>? lst = TempData["lst"] as List<CategoryDataModel>;
+}
+<h1>Category Page</h1>
+
+@if (lst != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Category ID</th>
+                <th>Category Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CategoryDataModel item in lst)
+            {
+                <tr>
+                    <th>@item.CategoryId</th>
+                    <td>@item.CategoryName</td>
+                    <td>
+                        <button class="btn btn-success text-white" onclick="btnEdit('@item.CategoryId')">Edit</button>
+                        <button class="btn btn-danger text-white">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<a href="/Category/Create">Create Category</a>
+<script>
+    function btnEdit(value){
+        var categoryID = parseInt(value);
+        window.location.href = '/Category/Edit?categoryID=' + categoryID;
+    }
+</script>
+
