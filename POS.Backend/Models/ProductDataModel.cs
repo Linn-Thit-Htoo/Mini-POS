@@ -13,5 +13,6 @@ namespace POS.Backend.Models
         public int Quantity { get; set; }
         public double Price { get; set; } // float column in table
         public DateTime CreatedDate { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

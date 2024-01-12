@@ -4,20 +4,21 @@
 @{
     ViewData["Title"] = "Edit Category";
     CategoryDataModel? item = TempData["item"] as CategoryDataModel;
-    var message = TempData["err"];
+    var error = TempData["error"];
 }
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    @if (message is not null)
+                    @if (error is not null)
                     {
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <strong>@message</strong>
+                            <strong>@error</strong>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     }
+                    <div id="successMsg"></div>
                     <h3 class="text-center">Create Category</h3>
                 </div>
                 <div class="card-body">
@@ -27,10 +28,12 @@
                     }
                     else
                     {
-                        <form action="" method="post">
+                        <form action="/Category/Edit" name="frm">
+                            <input type="hidden" name="CategoryId" value="@item.CategoryId" />
                             <label for="categoryName">Category Name: </label>
                             <input type="text" name="CategoryName" class="form-control" value="@item.CategoryName" />
-                            <button class="btn btn-info text-dark float-end mt-3">Update</button>
+                            @*button default type is submit*@
+                            <button class="btn btn-info text-dark float-end mt-3" onclick="submitForm()" type="button">Update</button>
                         </form>
                     }
                 </div>
@@ -38,3 +41,49 @@
         </div>
     </div>
 </div>
+
+<script>
+    function submitForm() {
+        const form = document.forms["frm"];
+        const categoryID = form["CategoryId"].value;
+        const categoryName = form["CategoryName"].value;
+        const successMessageElement = document.getElementById('successMsg');
+
+        const postBody = {
+            CategoryId: categoryID,
+            CategoryName: categoryName
+        };
+
+        fetch("https://localhost:7087/api/Category", {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(postBody) // stringify the JSON object
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            // Check if the response is JSON
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                return response.json();
+            } else {
+                // If not JSON, return the response text
+                return response.text();
+            }
+
+        }).then(data => {
+            successMessageElement.innerHTML = `<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                        <strong>${data}</strong>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    </div>`;
+        }).catch(error => {
+            successMessageElement.innerHTML = `<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                            <strong>Updating Fail!</strong>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        </div>`;
+        });
+    }
+</script>

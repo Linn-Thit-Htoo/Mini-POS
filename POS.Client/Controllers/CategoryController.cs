@@ -63,7 +63,7 @@ namespace POS.Client.Controllers
         #endregion
 
         #region Eidt Category Page
-        [HttpGet("/Category/Edit")]
+        [HttpGet("/Category/Edit/{categoryID}")]
         public async Task<ViewResult> EditCategoryPage(int categoryID)
         {
             HttpClient client = new HttpClient();
@@ -78,12 +78,13 @@ namespace POS.Client.Controllers
                 {
                     TempData["item"] = item;
                 }
-                else
-                {
-                    string message = await response.Content.ReadAsStringAsync();
-                    TempData["error"] = message;
-                }
             }
+            else
+            {
+                string message = await response.Content.ReadAsStringAsync();
+                TempData["error"] = message;
+            }
+
             return View();
         }
         #endregion

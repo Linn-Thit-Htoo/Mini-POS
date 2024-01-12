@@ -22,6 +22,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection"));
 });
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowSpecificOrigin",
+//        builder => builder
+//            .WithOrigins("https://localhost:7047") // Replace with your specific origin
+//            .AllowAnyMethod()
+//            .AllowAnyHeader());
+//});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +41,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseAuthorization();
 

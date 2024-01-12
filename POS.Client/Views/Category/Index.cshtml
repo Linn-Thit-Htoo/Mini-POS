@@ -26,7 +26,7 @@
                     <td>@item.CategoryName</td>
                     <td>
                         <button class="btn btn-success text-white" onclick="btnEdit('@item.CategoryId')">Edit</button>
-                        <button class="btn btn-danger text-white">Delete</button>
+                        <button class="btn btn-danger text-white" onclick="btnDelete('@item.CategoryId')">Delete</button>
                     </td>
                 </tr>
             }
@@ -34,10 +34,39 @@
     </table>
 }
 <a href="/Category/Create">Create Category</a>
+
 <script>
-    function btnEdit(value){
+
+    function btnEdit(value) {
         var categoryID = parseInt(value);
-        window.location.href = '/Category/Edit?categoryID=' + categoryID;
+        window.location.href = '/Category/Edit/' + categoryID;
+    }
+
+    function btnDelete(id) {
+        if (confirm("Are you sure to delete?")) {
+            fetch(`https://localhost:7087/api/Category?categoryID=${id}`, {
+                method: "DELETE"
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                // Check if the response is JSON
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    return response.json();
+                } else {
+                    // If not JSON, return the response text
+                    return response.text();
+                }
+            }).then(data => {
+                alert(data);
+                // Reload the page after successful deletion
+                location.reload();
+            }).catch(err => {
+                console.error(err);
+            })
+        }
     }
 </script>
 
